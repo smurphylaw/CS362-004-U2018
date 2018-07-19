@@ -1,0 +1,188 @@
+        -:    0:Source:cardtest3.c
+        -:    0:Graph:cardtest3.gcno
+        -:    0:Data:cardtest3.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:// Testing Feast Card
+        -:    2:
+        -:    3:#include <stdio.h>
+        -:    4:#include "dominion.h"
+        -:    5:#include "dominion_helpers.h"
+        -:    6:#include "rngs.h"
+        -:    7:#include <string.h>
+        -:    8:#include <assert.h>
+        -:    9:
+        -:   10:int fail = 0;
+        -:   11:
+        -:   12:// Own assert true function to provide more information than standard C assert
+function assertTrue called 21 returned 100% blocks executed 100%
+       21:   13:void assertTrue(int a, int b) {
+       21:   14:    if (a == b) {
+branch  0 taken 95% (fallthrough)
+branch  1 taken 5%
+       20:   15:        printf("TEST: PASSED\n\n");
+call    0 returned 100%
+        -:   16:    } else {
+        1:   17:        printf("TEST: FAILED\n\n");
+call    0 returned 100%
+        1:   18:        fail++;
+        -:   19:    }
+       21:   20:}
+        -:   21:
+function main called 1 returned 100% blocks executed 98%
+        1:   22:int main() {
+        -:   23:    
+        1:   24:    int k[10] = { adventurer, council_room, feast, gardens, mine,
+        -:   25:        remodel, smithy, village, baron, great_hall };
+        -:   26:    
+        1:   27:    int seed = 1000;
+        1:   28:    int numPlayer = 2;
+        -:   29:    
+        -:   30:    struct gameState state;
+        -:   31:    struct gameState testState;
+        -:   32:    
+        1:   33:    int handpos = 0;
+        1:   34:    int bonus = 0;
+        -:   35:    
+        -:   36:    int i;
+        -:   37:    
+        1:   38:    int choice1 = 0;
+        1:   39:    int choice2 = 0;
+        1:   40:    int choice3 = 0;
+        -:   41:    
+        -:   42:    //    int duchy, estate, province;
+        -:   43:    
+        1:   44:    printf("Testing: Feast Card\n\n");
+call    0 returned 100%
+        -:   45:    
+        -:   46:    // Clear the game state
+        1:   47:    memset(&state, 23, sizeof(struct gameState));
+        1:   48:    memset(&testState, 23, sizeof(struct gameState));
+        -:   49:    
+        -:   50:    // Initalize Game: 2 players, seed of 1000
+        1:   51:    initializeGame(numPlayer, k, seed, &state);
+call    0 returned 100%
+        -:   52:    
+        -:   53:    // Copy the game state to test case
+        1:   54:    memcpy(&testState, &state, sizeof(struct gameState));
+        -:   55:    
+        1:   56:    printf("**** Current Player Test Results **** \n");
+call    0 returned 100%
+        1:   57:    cardEffect(feast, choice1, choice2, choice3, &testState, handpos, &bonus);
+call    0 returned 100%
+        -:   58:    
+        -:   59:    // Current Player should get same number of card (trash one, gain one)
+        1:   60:    printf("Current Player should get same number of card (trash one, gain one)\n");
+call    0 returned 100%
+        1:   61:    printf("Hand Count = %d, Expected = %d\n", testState.handCount[0], state.handCount[0]);
+call    0 returned 100%
+        1:   62:    assertTrue(testState.handCount[0], state.handCount[0]);
+call    0 returned 100%
+        -:   63:    
+        -:   64:    // Check the current player's Deck Count
+        1:   65:    printf("Deck Count = %d, Expected = %d\n", testState.deckCount[0], state.deckCount[0]);
+call    0 returned 100%
+        1:   66:    assertTrue(testState.deckCount[0], state.deckCount[0]);
+call    0 returned 100%
+        -:   67:    
+        -:   68:    // Check the current player's Coin Count
+        1:   69:    printf("Coin Count = %d, Expected = %d\n", testState.coins, state.coins + 5);
+call    0 returned 100%
+        1:   70:    assertTrue(testState.coins, state.coins + 5);
+call    0 returned 100%
+        -:   71:    
+        -:   72:    // Check the supply count for choice1
+        1:   73:    printf("Supply Count = %d, Expected = %d\n", testState.supplyCount[choice1], state.supplyCount[choice1] - 1);
+call    0 returned 100%
+        1:   74:    assertTrue(testState.supplyCount[choice1], state.supplyCount[choice1] - 1);
+call    0 returned 100%
+        -:   75:    
+        -:   76:    // Bad Test Case
+        -:   77:    // Check if supply count is 0
+        1:   78:    testState.supplyCount[choice1] = 0;
+        1:   79:    printf("Depleted choice1 supply count to 0:\n");
+call    0 returned 100%
+        1:   80:    printf("Currernt player should NOT be able to buy card due to supply is empty\n");
+call    0 returned 100%
+        -:   81://    printf("Supply Count = %d, Expected = %d\n", testState.supplyCount[choice1], 0);
+        -:   82://    assertTrue(supplyCount(0, &testState), -1);
+        1:   83:    assertTrue(buyCard(choice1, &testState), -1);
+call    0 returned 100%
+call    1 returned 100%
+        -:   84:    
+        -:   85:    // Check if current player have enough coins
+        1:   86:    testState.coins = 0;
+        1:   87:    printf("Depleted current player coins to 0:\n");
+call    0 returned 100%
+        1:   88:    printf("Currernt player should NOT be able to buy card\n");
+call    0 returned 100%
+        1:   89:    assertTrue(buyCard(choice1, &testState), -1);
+call    0 returned 100%
+call    1 returned 100%
+        -:   90:    
+        1:   91:    printf("**** Other Player State Test Results **** \n");
+call    0 returned 100%
+        -:   92:    // Check the Player 2's Hand Count
+        1:   93:    printf("Hand Count = %d, Expected = %d\n", testState.handCount[1], state.handCount[1]);
+call    0 returned 100%
+        1:   94:    assertTrue(testState.handCount[1], state.handCount[1]);
+call    0 returned 100%
+        -:   95:    
+        -:   96:    // Check the Player 2's Deck Count
+        1:   97:    printf("Deck Count = %d, Expected = %d\n", testState.deckCount[1], state.deckCount[1]);
+call    0 returned 100%
+        1:   98:    assertTrue(testState.deckCount[1], state.deckCount[1]);
+call    0 returned 100%
+        -:   99:    
+        -:  100:    // Check State Change in other card piles
+        1:  101:    printf("**** Other Card Piles State Test Results **** \n");
+call    0 returned 100%
+        -:  102:    
+        -:  103:    // Check the Victory Pile
+        1:  104:    printf("* Victory Pile *\n");
+call    0 returned 100%
+        1:  105:    printf("Duchy:\n");
+call    0 returned 100%
+        1:  106:    printf("Duchy Count = %d, Expected = %d\n", testState.supplyCount[duchy], state.supplyCount[duchy]);
+call    0 returned 100%
+        1:  107:    assertTrue(testState.supplyCount[duchy], state.supplyCount[duchy]);
+call    0 returned 100%
+        -:  108:    
+        1:  109:    printf("Estate:\n");
+call    0 returned 100%
+        1:  110:    printf("Estate Count = %d, Expected = %d\n", testState.supplyCount[estate], state.supplyCount[estate]);
+call    0 returned 100%
+        1:  111:    assertTrue(testState.supplyCount[estate], state.supplyCount[estate]);
+call    0 returned 100%
+        -:  112:    
+        1:  113:    printf("Province:\n");
+call    0 returned 100%
+        1:  114:    printf("Province Count = %d, Expected = %d\n", testState.supplyCount[province], state.supplyCount[province]);
+call    0 returned 100%
+        1:  115:    assertTrue(testState.supplyCount[province], state.supplyCount[province]);
+call    0 returned 100%
+        -:  116:    
+        -:  117:    // Check the Kingdom Pile
+        1:  118:    printf("* Kingdom Pile *\n");
+call    0 returned 100%
+       11:  119:    for (i = 0; i < 10; i++) {
+branch  0 taken 91%
+branch  1 taken 9% (fallthrough)
+       10:  120:        printf("Kingdom #%d = %d, Expected = %d\n", i, testState.supplyCount[k[i]], state.supplyCount[k[i]]);
+call    0 returned 100%
+       10:  121:        assertTrue(testState.supplyCount[k[i]], state.supplyCount[k[i]]);
+call    0 returned 100%
+        -:  122:    }
+        -:  123:    
+        1:  124:    if (fail == 0) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:  125:        printf("PROGRAM TEST SUCCESFULLY COMPLETED\n\n");
+call    0 never executed
+        -:  126:    } else {
+        1:  127:        printf("PROGRAM TEST FAILED\n\n");
+call    0 returned 100%
+        -:  128:    }
+        -:  129:    
+        1:  130:    return 0;
+        -:  131:}

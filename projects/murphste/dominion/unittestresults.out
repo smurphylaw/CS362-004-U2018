@@ -1,0 +1,444 @@
+unittest1.c
+Testing: updateCoins()
+
+Copper Coins = 1, Expected = 1
+TEST: PASSED
+
+Silver Coins = 2, Expected = 2
+TEST: PASSED
+
+Gold Coins = 3, Expected = 3
+TEST: PASSED
+
+Copper Coins = 3, Expected = 3
+TEST: PASSED
+
+Silver Coins = 5, Expected = 5
+TEST: PASSED
+
+Gold Coins = 7, Expected = 7
+TEST: PASSED
+
+Copper Coins = 5, Expected = 5
+TEST: PASSED
+
+Silver Coins = 8, Expected = 8
+TEST: PASSED
+
+Gold Coins = 11, Expected = 11
+TEST: PASSED
+
+Copper Coins = 7, Expected = 7
+TEST: PASSED
+
+Silver Coins = 11, Expected = 11
+TEST: PASSED
+
+Gold Coins = 15, Expected = 15
+TEST: PASSED
+
+Copper Coins = 9, Expected = 9
+TEST: PASSED
+
+Silver Coins = 14, Expected = 14
+TEST: PASSED
+
+Gold Coins = 19, Expected = 19
+TEST: PASSED
+
+PROGRAM TEST SUCCESFULLY COMPLETED
+
+File 'unittest1.c'
+Lines executed:92.31% of 39
+Branches executed:100.00% of 8
+Taken at least once:75.00% of 8
+Calls executed:86.67% of 15
+Creating 'unittest1.c.gcov'
+
+unittest2.c
+Testing: shuffle()
+Deck Count = 0
+Game should cannot shuffle due to no cards in deck
+TEST: PASSED
+
+Deck Count = 20
+Game can shuffle the deck
+TEST: PASSED
+
+PROGRAM TEST SUCCESFULLY COMPLETED
+
+File 'unittest2.c'
+Lines executed:88.46% of 26
+Creating 'unittest2.c.gcov'
+
+Lines executed:88.46% of 26
+unittest3.c
+Testing: isGameOver()
+
+Province = 0
+Game should end since stack is empty
+TEST: PASSED
+
+Province = 1
+Game should NOT end since stack is NOT empty
+TEST: PASSED
+
+Supply Count = 0 for 3 piles
+Game should end
+TEST: PASSED
+
+Supply Count = 1 for 3 piles
+Game should NOT end since supply piles are NOT empty
+TEST: PASSED
+
+PROGRAM TEST SUCCESFULLY COMPLETED
+
+File 'unittest3.c'
+No executable lines
+No branches
+No calls
+Removing 'unittest3.c.gcov'
+
+unittest4.c
+Testing: isGameOver()
+
+Province = 0
+Game should end since stack is empty
+TEST: PASSED
+
+Province = 1
+Game should NOT end since stack is NOT empty
+TEST: PASSED
+
+Supply Count = 0 for 3 piles
+Game should end
+TEST: PASSED
+
+Supply Count = 1 for 3 piles
+Game should NOT end since supply piles are NOT empty
+TEST: PASSED
+
+PROGRAM TEST SUCCESFULLY COMPLETED
+
+File 'unittest4.c'
+Lines executed:92.11% of 38
+Branches executed:100.00% of 4
+Taken at least once:50.00% of 4
+Calls executed:90.91% of 22
+Creating 'unittest4.c.gcov'
+
+cardtest1.c
+Testing: Adventure Card
+
+**** Current Player Test Results **** 
+Current Player gained 2 treasure cards
+Treasure Card = 7, Expected = 6
+TEST: FAILED
+
+Current Player gained 2 cards
+Hand Count = 8, Expected = 6
+TEST: FAILED
+
+**** Other Player State Test Results **** 
+Hand Count = 0, Expected = 0
+TEST: PASSED
+
+Deck Count = 10, Expected = 10
+TEST: PASSED
+
+Coin Count = 4, Expected = 4
+TEST: PASSED
+
+**** Other Card Piles State Test Results **** 
+* Victory Pile *
+Duchy:
+Duchy Count = 8, Expected = 8
+TEST: PASSED
+
+Estate:
+Estate Count = 8, Expected = 8
+TEST: PASSED
+
+Province:
+Province Count = 8, Expected = 8
+TEST: PASSED
+
+* Kingdom Pile *
+Kingdom #0 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #1 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #2 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #3 = 8, Expected = 8
+TEST: PASSED
+
+Kingdom #4 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #5 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #6 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #7 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #8 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #9 = 8, Expected = 8
+TEST: PASSED
+
+PROGRAM TEST FAILED
+
+File 'cardtest1.c'
+Lines executed:98.46% of 65
+Branches executed:100.00% of 22
+Taken at least once:77.27% of 22
+Calls executed:97.14% of 35
+Creating 'cardtest1.c.gcov'
+
+cardtest2.c
+Testing: Smithy Card
+
+**** Current Player Test Results **** 
+Current Player gained 3 cards
+Hand Count = 6, Expected = 7
+TEST: FAILED
+
+Deck Count = 3, Expected = 2
+TEST: FAILED
+
+**** Other Player State Test Results **** 
+Hand Count = 0, Expected = 0
+TEST: PASSED
+
+Deck Count = 10, Expected = 10
+TEST: PASSED
+
+Coin Count = 4, Expected = 4
+TEST: PASSED
+
+**** Other Card Piles State Test Results **** 
+* Victory Pile *
+Duchy:
+Duchy Count = 8, Expected = 8
+TEST: PASSED
+
+Estate:
+Estate Count = 8, Expected = 8
+TEST: PASSED
+
+Province:
+Province Count = 8, Expected = 8
+TEST: PASSED
+
+* Kingdom Pile *
+Kingdom #0 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #1 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #2 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #3 = 8, Expected = 8
+TEST: PASSED
+
+Kingdom #4 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #5 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #6 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #7 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #8 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #9 = 8, Expected = 8
+TEST: PASSED
+
+PROGRAM TEST FAILED
+
+File 'cardtest2.c'
+Lines executed:98.15% of 54
+Branches executed:100.00% of 6
+Taken at least once:83.33% of 6
+Calls executed:97.06% of 34
+Creating 'cardtest2.c.gcov'
+
+cardtest3.c
+Testing: Feast Card
+
+**** Current Player Test Results **** 
+Current Player should get same number of card (trash one, gain one)
+Hand Count = 5, Expected = 5
+TEST: PASSED
+
+Deck Count = 5, Expected = 5
+TEST: PASSED
+
+Coin Count = 7, Expected = 9
+TEST: FAILED
+
+Supply Count = 9, Expected = 9
+TEST: PASSED
+
+Depleted choice1 supply count to 0:
+Currernt player should NOT be able to buy card due to supply is empty
+TEST: PASSED
+
+Depleted current player coins to 0:
+Currernt player should NOT be able to buy card
+TEST: PASSED
+
+**** Other Player State Test Results **** 
+Hand Count = 0, Expected = 0
+TEST: PASSED
+
+Deck Count = 10, Expected = 10
+TEST: PASSED
+
+**** Other Card Piles State Test Results **** 
+* Victory Pile *
+Duchy:
+Duchy Count = 8, Expected = 8
+TEST: PASSED
+
+Estate:
+Estate Count = 8, Expected = 8
+TEST: PASSED
+
+Province:
+Province Count = 8, Expected = 8
+TEST: PASSED
+
+* Kingdom Pile *
+Kingdom #0 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #1 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #2 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #3 = 8, Expected = 8
+TEST: PASSED
+
+Kingdom #4 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #5 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #6 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #7 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #8 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #9 = 8, Expected = 8
+TEST: PASSED
+
+PROGRAM TEST FAILED
+
+File 'cardtest3.c'
+Lines executed:98.41% of 63
+Branches executed:100.00% of 6
+Taken at least once:83.33% of 6
+Calls executed:97.73% of 44
+Creating 'cardtest3.c.gcov'
+
+cardtest4.c
+Testing: Village Card
+
+**** Current Player Test Results **** 
+Current Player gained 1 cards
+Hand Count = 5, Expected = 5
+TEST: PASSED
+
+Deck Count = 4, Expected = 4
+TEST: PASSED
+
+Action Count = 5, Expected = 3
+TEST: FAILED
+
+**** Other Player State Test Results **** 
+Hand Count = 0, Expected = 0
+TEST: PASSED
+
+Deck Count = 10, Expected = 10
+TEST: PASSED
+
+Coin Count = 4, Expected = 4
+TEST: PASSED
+
+**** Other Card Piles State Test Results **** 
+* Victory Pile *
+Duchy:
+Duchy Count = 8, Expected = 8
+TEST: PASSED
+
+Estate:
+Estate Count = 8, Expected = 8
+TEST: PASSED
+
+Province:
+Province Count = 8, Expected = 8
+TEST: PASSED
+
+* Kingdom Pile *
+Kingdom #0 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #1 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #2 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #3 = 8, Expected = 8
+TEST: PASSED
+
+Kingdom #4 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #5 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #6 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #7 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #8 = 10, Expected = 10
+TEST: PASSED
+
+Kingdom #9 = 8, Expected = 8
+TEST: PASSED
+
+PROGRAM TEST FAILED
+
+File 'cardtest4.c'
+Lines executed:98.21% of 56
+Branches executed:100.00% of 6
+Taken at least once:83.33% of 6
+Calls executed:97.22% of 36
+Creating 'cardtest4.c.gcov'
+

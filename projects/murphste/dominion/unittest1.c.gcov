@@ -1,0 +1,131 @@
+        -:    0:Source:unittest1.c
+        -:    0:Graph:unittest1.gcno
+        -:    0:Data:unittest1.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:// Testing updateCoins()
+        -:    2:
+        -:    3:#include <stdio.h>
+        -:    4:#include "dominion.h"
+        -:    5:#include "dominion_helpers.h"
+        -:    6:#include "rngs.h"
+        -:    7:#include <string.h>
+        -:    8:#include <assert.h>
+        -:    9:
+        -:   10:int fail;
+        -:   11:
+        -:   12:// Own assert true function to provide more information than standard C assert
+function assertTrue called 15 returned 100% blocks executed 60%
+       15:   13:void assertTrue(int a, int b) {
+       15:   14:    if (a == b) {
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+       15:   15:        printf("TEST: PASSED\n\n");
+call    0 returned 100%
+        -:   16:    } else {
+    #####:   17:        printf("TEST: FAILED\n\n");
+call    0 never executed
+    #####:   18:        fail++;
+        -:   19:    }
+       15:   20:}
+        -:   21:
+function main called 1 returned 100% blocks executed 95%
+        1:   22:int main() {
+        -:   23:    
+        1:   24:    int k[10] = { adventurer, council_room, feast, gardens, mine,
+        -:   25:        remodel, smithy, village, baron, great_hall };
+        -:   26:    
+        -:   27:    int i;
+        1:   28:    int seed = 1000;
+        1:   29:    int player = 0;
+        1:   30:    int numPlayer = 2;
+        1:   31:    int bonus = 0;
+        -:   32:    
+        -:   33:    struct gameState state;
+        -:   34:    
+        -:   35:    int handCount;
+        1:   36:    int maxHandCount = 5;
+        -:   37:    
+        -:   38:    // Arrays of all coppers, silvers, and golds
+        -:   39:    int coppers[MAX_HAND];
+        -:   40:    int silvers[MAX_HAND];
+        -:   41:    int golds[MAX_HAND];
+        -:   42:
+        -:   43:    
+        1:   44:    printf("Testing: updateCoins()\n\n");
+call    0 returned 100%
+        -:   45:    
+      501:   46:    for (i = 0; i < MAX_HAND; i++) {
+branch  0 taken 99%
+branch  1 taken 1% (fallthrough)
+      500:   47:        coppers[i] = copper;
+      500:   48:        silvers[i] = silver;
+      500:   49:        golds[i] = gold;
+        -:   50:    }
+        -:   51:    
+        6:   52:    for (handCount = 1; handCount <= maxHandCount; handCount++) {
+branch  0 taken 83%
+branch  1 taken 17% (fallthrough)
+        -:   53:        
+        -:   54:        // Clear the game state
+        5:   55:        memset(&state, 23, sizeof(struct gameState));
+        -:   56:    
+        -:   57:        // Initalize Game: 2 players, seed of 1000
+        5:   58:        initializeGame(numPlayer, k, seed, &state);
+call    0 returned 100%
+        -:   59:    
+        -:   60:        // Set the number of cards on hand
+        5:   61:        state.handCount[player] = handCount;
+        -:   62:    
+        -:   63:        // Set all the cards to copper
+        5:   64:        memcpy(state.hand[player], coppers, sizeof(int) * handCount);
+        5:   65:        updateCoins(player, &state, bonus);
+call    0 returned 100%
+        -:   66:
+        5:   67:        printf("Copper Coins = %d, Expected = %d\n", state.coins, handCount * 1 + bonus);
+call    0 returned 100%
+        -:   68:
+        -:   69:        // Check if the number of coins is correct
+        5:   70:        assertTrue(state.coins, handCount * 1 + bonus);
+call    0 returned 100%
+        -:   71:    
+        -:   72:        // Set all the cards to silver
+        5:   73:        memcpy(state.hand[player], silvers, sizeof(int) * handCount);
+        5:   74:        updateCoins(player, &state, bonus);
+call    0 returned 100%
+        -:   75:
+        5:   76:        printf("Silver Coins = %d, Expected = %d\n", state.coins, handCount * 2 + bonus);
+call    0 returned 100%
+        -:   77:    
+        -:   78:        // Check if the number of coins is correct
+        5:   79:        assertTrue(state.coins, handCount * 2 + bonus);
+call    0 returned 100%
+        -:   80:    
+        -:   81:        // Set all the cards to gold
+        5:   82:        memcpy(state.hand[player], golds, sizeof(int) * handCount);
+        5:   83:        updateCoins(player, &state, bonus);
+call    0 returned 100%
+        -:   84:
+        5:   85:        printf("Gold Coins = %d, Expected = %d\n", state.coins, handCount * 3 + bonus);
+call    0 returned 100%
+        -:   86:
+        -:   87:        // Check if the number of coins is correct
+        5:   88:        assertTrue(state.coins, handCount * 3 + bonus);
+call    0 returned 100%
+        -:   89:        
+        -:   90:        // Increase bonus
+        5:   91:        bonus++;
+        -:   92:    }
+        -:   93:    
+        1:   94:    if (fail == 0) {
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        1:   95:        printf("PROGRAM TEST SUCCESFULLY COMPLETED\n\n");
+call    0 returned 100%
+        -:   96:    } else {
+    #####:   97:        printf("PROGRAM TEST FAILED\n\n");
+call    0 never executed
+        -:   98:    }
+        -:   99:    
+        1:  100:    return 0;
+        -:  101:}
