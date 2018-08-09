@@ -1,0 +1,259 @@
+        -:    0:Source:randomtestadventurer.c
+        -:    0:Graph:randomtestadventurer.gcno
+        -:    0:Data:randomtestadventurer.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1://gcc -o randomtestadventurer -g  randomtestadventurer.c dominion.o rngs.o -Wall -fpic -coverage -lm -std=c99
+        -:    2:
+        -:    3:// Random Generator for Adventurer Card
+        -:    4:
+        -:    5:#include <stdio.h>
+        -:    6:#include "dominion.h"
+        -:    7:#include "dominion_helpers.h"
+        -:    8:#include "rngs.h"
+        -:    9:#include <string.h>
+        -:   10:#include <assert.h>
+        -:   11:#include <math.h>
+        -:   12:
+        -:   13:int failCount = 0;
+        -:   14:int shuffleFailed = 0;
+        -:   15:int drawCardFailed = 0;
+        -:   16:int treasureCardFailed = 0;
+        -:   17:
+function randomAdventurerCheck called 5000 returned 100% blocks executed 87%
+     5000:   18:void randomAdventurerCheck(int currentPlayer, struct gameState *state) {
+     5000:   19:    int handpos = 0;
+     5000:   20:    int bonus = 0;
+        -:   21:    
+     5000:   22:    int choice1 = 0;
+     5000:   23:    int choice2 = 0;
+     5000:   24:    int choice3 = 0;
+        -:   25:    
+     5000:   26:    int drawntreasure = 0;
+        -:   27:    int cardDrawn;
+        -:   28:    int temphand[MAX_HAND];
+        -:   29:    int k;
+     5000:   30:    int z = 0;
+        -:   31:    
+        -:   32:    int success;
+        -:   33:    struct gameState testState;
+        -:   34:    
+        -:   35:    int treasureCard;
+     5000:   36:    int testStateTreasureCard = 0;
+     5000:   37:    int stateTreasureCard = 0;
+        -:   38:
+        -:   39:    // Clear the game testState
+     5000:   40:    memset(&testState, 23, sizeof(struct gameState));
+        -:   41:    // Copy thetemphandgame state to test case
+     5000:   42:    memcpy(&testState, state, sizeof(struct gameState));
+        -:   43:    
+        -:   44:    // Call the function to run the test
+     5000:   45:    success = cardEffect(adventurer, choice1, choice2, choice3, &testState, handpos, &bonus);
+call    0 returned 100%
+        -:   46:    
+     5000:   47:    if (success == -1) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   48:        failCount++;
+        -:   49:    }
+        -:   50:    
+        -:   51:    // Taken from Adventurer Card Function
+    35536:   52:    while(drawntreasure<3){
+branch  0 taken 84%
+branch  1 taken 16% (fallthrough)
+    25536:   53:        if (testState.deckCount[currentPlayer] <1){
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+        -:   54:            //if the deck is empty we need to shuffle discard and add to deck
+      353:   55:            success = shuffle(currentPlayer, &testState);
+call    0 returned 100%
+        -:   56:            
+        -:   57:            // Was the shuffle a success? Does the deck have more than 1 card?
+      353:   58:            if (!success && testState.deckCount[currentPlayer] >= 1) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+branch  2 never executed
+branch  3 never executed
+        -:   59:                //                    printf("Shuffle failed for Current Player: %d and the Deck Count: %d\n", currentPlayer, testState.deckCount[currentPlayer]);
+    #####:   60:                shuffleFailed++;
+    #####:   61:                failCount++;
+        -:   62:            }
+        -:   63:        }
+        -:   64:        
+        -:   65:        // Was drawing card a success?
+    25536:   66:        success = drawCard(currentPlayer, &testState);
+call    0 returned 100%
+        -:   67:        
+    25536:   68:        if (success == -1 && testState.deckCount[currentPlayer] > 0) {
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+branch  2 taken 0% (fallthrough)
+branch  3 taken 100%
+        -:   69:            //                printf("Draw Card failed for Current Player: %d and the Deck Count: %d\n", currentPlayer, testState.deckCount[currentPlayer]);
+    #####:   70:            drawCardFailed++;
+    #####:   71:            failCount++;
+        -:   72:        }
+        -:   73:        
+    25536:   74:        cardDrawn = testState.hand[currentPlayer][testState.handCount[currentPlayer]-1];
+        -:   75:        //top card of hand is most recently drawn card.
+    25536:   76:        if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
+branch  0 taken 80% (fallthrough)
+branch  1 taken 20%
+branch  2 taken 76% (fallthrough)
+branch  3 taken 24%
+branch  4 taken 32% (fallthrough)
+branch  5 taken 68%
+    15000:   77:            drawntreasure++;
+        -:   78:        else{
+    10536:   79:            temphand[z]=cardDrawn;
+        -:   80:            //this should just remove the top card (the most recently drawn one).
+    10536:   81:            testState.handCount[currentPlayer]--;
+    10536:   82:            z++;
+        -:   83:        }
+        -:   84:    }
+        -:   85:    
+    20536:   86:    while(z-1>=0){
+branch  0 taken 68%
+branch  1 taken 32% (fallthrough)
+        -:   87:        // discard all cards in play that have been drawn
+    10536:   88:        testState.discard[currentPlayer][testState.discardCount[currentPlayer]++] = temphand[z-1];
+    10536:   89:        z=z-1;
+        -:   90:    }
+        -:   91:
+        -:   92:    // Check if Treasure Cards for testState and state match
+  1293348:   93:    for (k = 0; k < testState.handCount[currentPlayer]; k++) {
+branch  0 taken 99%
+branch  1 taken 1% (fallthrough)
+        -:   94:        // Type of treasure card (copper, silver, gold, or others)
+  1288348:   95:        treasureCard = testState.hand[currentPlayer][k];
+  1288348:   96:        if (treasureCard == copper || treasureCard == silver || treasureCard == gold) {
+branch  0 taken 99% (fallthrough)
+branch  1 taken 1%
+branch  2 taken 99% (fallthrough)
+branch  3 taken 1%
+branch  4 taken 1% (fallthrough)
+branch  5 taken 99%
+    29736:   97:            testStateTreasureCard++;
+        -:   98:        }
+        -:   99:    }
+        -:  100:    
+  1266576:  101:    for (k = 0; k < state->handCount[currentPlayer]; k++) {
+branch  0 taken 99%
+branch  1 taken 1% (fallthrough)
+        -:  102:        // Type of treasure card (copper, silver, gold, or others)
+  1261576:  103:        treasureCard = state->hand[currentPlayer][k];
+  1261576:  104:        if (treasureCard == copper || treasureCard == silver || treasureCard == gold) {
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+branch  2 taken 100% (fallthrough)
+branch  3 taken 0%
+branch  4 taken 0% (fallthrough)
+branch  5 taken 100%
+    #####:  105:            stateTreasureCard++;
+        -:  106:        }
+        -:  107:    }
+        -:  108:    
+     5000:  109:    if (testStateTreasureCard != stateTreasureCard) {
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+     5000:  110:        treasureCardFailed++;
+     5000:  111:        failCount++;
+        -:  112:    }
+     5000:  113:}
+        -:  114:
+function main called 1 returned 100% blocks executed 96%
+        1:  115:int main() {
+        -:  116:    // Use time as seed for random
+        1:  117:    srand(time(NULL));
+call    0 returned 100%
+call    1 returned 100%
+        -:  118:    
+        -:  119://    int k[10] = { adventurer, council_room, feast, gardens, mine,
+        -:  120://        remodel, smithy, village, baron, great_hall };
+        -:  121:  
+        -:  122://    int seed = 1000;
+        -:  123:    int currentPlayer;
+        -:  124:
+        -:  125:    struct gameState state;
+        -:  126:
+        1:  127:    int discard = 0;
+        -:  128:    int i, j;
+        -:  129:    
+        -:  130:    // Treasure types (used for drawing treasure cards)
+        1:  131:    int treasures[] = { copper, silver, gold };
+        -:  132:    int treasureCards;
+        -:  133:
+        1:  134:    int iterations = 5000;
+        -:  135:    
+        -:  136:    
+        -:  137:    // Minimum cards in deck and hand
+        1:  138:    int min = 3;
+        -:  139:    
+        1:  140:    printf("Testing: adventureCard\n\n");
+call    0 returned 100%
+        1:  141:    printf("****** RANDOM TESTS *****\n");
+call    0 returned 100%
+        -:  142:    
+        -:  143:    // Initalize Game
+        -:  144://    initializeGame(numPlayer, k, seed, &state);
+        -:  145:
+     5001:  146:    for (i = 0; i < iterations; i++) {
+branch  0 taken 99%
+branch  1 taken 1% (fallthrough)
+        -:  147:        // Clear the game state
+     5000:  148:        memset(&state, 23, sizeof(struct gameState));
+        -:  149:        
+        -:  150:        // Get the player number
+     5000:  151:        currentPlayer = Random() * MAX_PLAYERS;
+call    0 returned 100%
+        -:  152:
+        -:  153:        // Set the deck count for the player - minimum of 3 cards
+     5000:  154:        state.deckCount[currentPlayer] = (Random() * (MAX_DECK - min + 1)) + min;
+call    0 returned 100%
+        -:  155:
+        -:  156:        // Set hand count to random number -- bound of 3 to MAX_HAND (if empty, no treasure card drawn thus loop never ends)
+     5000:  157:        state.handCount[currentPlayer] = (Random() * (MAX_HAND - min + 1)) + min;
+call    0 returned 100%
+        -:  158:
+        -:  159:        // Set the discard count for the player
+     5000:  160:        state.discardCount[currentPlayer] = discard;
+        -:  161:        
+        -:  162:        // Set the number of treasure cards - minimum of 3 -- avoid endless loop
+     5000:  163:        treasureCards = (Random() * (state.deckCount[currentPlayer] - min) + 1) + min;
+call    0 returned 100%
+        -:  164:        
+   642098:  165:        for (j = 0; j < treasureCards; j++) {
+branch  0 taken 99%
+branch  1 taken 1% (fallthrough)
+   637098:  166:            state.deck[currentPlayer][j] = treasures[rand() % 3];
+call    0 returned 100%
+        -:  167:        }
+        -:  168:        
+        -:  169:        // Set the player as current player (whose turn)
+     5000:  170:        state.whoseTurn = currentPlayer;
+        -:  171:
+        -:  172:        // Run Adventurer Test
+     5000:  173:        randomAdventurerCheck(currentPlayer, &state);
+call    0 returned 100%
+        -:  174:    }
+        -:  175:
+        1:  176:    if (failCount == 0) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:  177:        printf("PROGRAM TEST SUCCESFULLY COMPLETED\n\n");
+call    0 never executed
+        -:  178:    } else {
+        1:  179:        printf("PROGRAM TEST FAILED\n\n");
+call    0 returned 100%
+        1:  180:        printf("NUMBER OF TESTS FAILED: %d\n", failCount);
+call    0 returned 100%
+        1:  181:        printf("SHUFFLE TESTS FAILED: %d\n", shuffleFailed);
+call    0 returned 100%
+        1:  182:        printf("DRAW CARD TESTS FAILED: %d\n", drawCardFailed);
+call    0 returned 100%
+        1:  183:        printf("TREASURE COUNT TESTS FAILED: %d\n", treasureCardFailed);
+call    0 returned 100%
+        -:  184:    }
+        -:  185:    
+        1:  186:    return 0;
+        -:  187:}

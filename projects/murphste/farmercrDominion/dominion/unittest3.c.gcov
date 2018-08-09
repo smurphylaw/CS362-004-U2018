@@ -1,0 +1,105 @@
+        -:    0:Source:unittest3.c
+        -:    0:Graph:unittest3.gcno
+        -:    0:Data:unittest3.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:// Testing buyCard()
+        -:    2:
+        -:    3:#include <stdio.h>
+        -:    4:#include "dominion.h"
+        -:    5:#include "dominion_helpers.h"
+        -:    6:#include "rngs.h"
+        -:    7:#include <string.h>
+        -:    8:#include <assert.h>
+        -:    9:
+        -:   10:int fail = 0;
+        -:   11:
+        -:   12:// Own assert true function to provide more information than standard C assert
+function assertTrue called 4 returned 100% blocks executed 60%
+        4:   13:void assertTrue(int a, int b) {
+        4:   14:    if (a == b) {
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        4:   15:        printf("TEST: PASSED\n\n");
+call    0 returned 100%
+        -:   16:    } else {
+    #####:   17:        printf("TEST: FAILED\n\n");
+call    0 never executed
+    #####:   18:        fail++;
+        -:   19:    }
+        4:   20:}
+        -:   21:
+function main called 1 returned 100% blocks executed 96%
+        1:   22:int main() {
+        -:   23:    
+        1:   24:    int k[10] = { adventurer, council_room, feast, gardens, mine,
+        -:   25:        remodel, smithy, village, baron, great_hall };
+        -:   26:    
+        1:   27:    int seed = 1000;
+        1:   28:    int numPlayer = 2;
+        -:   29:    
+        -:   30:    struct gameState state;
+        -:   31:    
+        1:   32:    printf("Testing: buyCard()\n\n");
+call    0 returned 100%
+        -:   33:    
+        -:   34:    // Clear the game state
+        1:   35:    memset(&state, 23, sizeof(struct gameState));
+        -:   36:    
+        -:   37:    // Initalize Game: 2 players, seed of 1000
+        1:   38:    initializeGame(numPlayer, k, seed, &state);
+call    0 returned 100%
+        -:   39:    
+        -:   40:    // Set 0 as the numbuys player have
+        1:   41:    printf("NumBuy = 0\n");
+call    0 returned 100%
+        1:   42:    printf("Game should NOT allow you to buy a card due to insufficient numBuys\n");
+call    0 returned 100%
+        1:   43:    state.numBuys = 0;
+        1:   44:    assertTrue(buyCard(3, &state), -1);
+call    0 returned 100%
+call    1 returned 100%
+        -:   45:    
+        -:   46:    // Set numbuy larger than 1
+        1:   47:    printf("NumBuy = 3\n");
+call    0 returned 100%
+        1:   48:    printf("Game should let you purchase a card\n");
+call    0 returned 100%
+        1:   49:    state.numBuys = 3;
+        1:   50:    assertTrue(buyCard(5, &state), 0);
+call    0 returned 100%
+call    1 returned 100%
+        -:   51:    
+        -:   52:    // Set coins to 0
+        1:   53:    printf("Coin = 0\n");
+call    0 returned 100%
+        1:   54:    printf("Game should NOT allow you to buy a card due to insufficient fund\n");
+call    0 returned 100%
+        1:   55:    state.coins = 0;
+        1:   56:    assertTrue(buyCard(3, &state), -1);
+call    0 returned 100%
+call    1 returned 100%
+        -:   57:    
+        -:   58:    // Give coins a nice number to make purchases
+        1:   59:    printf("Coin = 50\n");
+call    0 returned 100%
+        1:   60:    printf("Game should allow you to buy a card\n");
+call    0 returned 100%
+        1:   61:    state.numBuys = 5;
+        1:   62:    state.coins = 50;
+        1:   63:    assertTrue(buyCard(3, &state), 0);
+call    0 returned 100%
+call    1 returned 100%
+        -:   64:    
+        1:   65:    if (fail == 0) {
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        1:   66:        printf("PROGRAM TEST SUCCESFULLY COMPLETED\n\n");
+call    0 returned 100%
+        -:   67:    } else {
+    #####:   68:        printf("PROGRAM TEST FAILED\n\n");
+call    0 never executed
+        -:   69:    }
+        -:   70:    
+        1:   71:    return 0;
+        -:   72:}

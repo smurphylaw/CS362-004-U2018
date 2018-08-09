@@ -1,0 +1,201 @@
+        -:    0:Source:randomtestcard2.c
+        -:    0:Graph:randomtestcard2.gcno
+        -:    0:Data:randomtestcard2.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1://gcc -o randomtestcard2 -g  randomtestcard2.c dominion.o rngs.o -Wall -fpic -coverage -lm -std=c99
+        -:    2:
+        -:    3:// Random Generator for Village Card
+        -:    4:
+        -:    5:#include <stdio.h>
+        -:    6:#include "dominion.h"
+        -:    7:#include "dominion_helpers.h"
+        -:    8:#include "rngs.h"
+        -:    9:#include <string.h>
+        -:   10:#include <assert.h>
+        -:   11:#include <math.h>
+        -:   12:
+        -:   13:int failCount = 0;
+        -:   14:int discardFailed = 0;
+        -:   15:int drawCardFailed = 0;
+        -:   16:int deckCountFailed = 0;
+        -:   17:int handCountFailed = 0;
+        -:   18:int numActionsFailed = 0;
+        -:   19:
+function randomSmithyCheck called 5000 returned 100% blocks executed 71%
+     5000:   20:void randomSmithyCheck(int currentPlayer, struct gameState *state) {
+        -:   21:    int k;
+        -:   22:    
+     5000:   23:    int handPos = 0;
+     5000:   24:    int bonus = 0;
+        -:   25:    
+     5000:   26:    int choice1 = 0;
+     5000:   27:    int choice2 = 0;
+     5000:   28:    int choice3 = 0;
+        -:   29:    
+        -:   30:    int success;
+        -:   31:    struct gameState testState;
+        -:   32:    
+        -:   33:    
+        -:   34:    // Clear the game testState
+     5000:   35:    memset(&testState, 23, sizeof(struct gameState));
+        -:   36:    // Copy thetemphandgame state to test case
+     5000:   37:    memcpy(&testState, state, sizeof(struct gameState));
+        -:   38:    
+        -:   39:    // Call the function to run the test
+     5000:   40:    success = cardEffect(village, choice1, choice2, choice3, &testState, handPos, &bonus);
+call    0 returned 100%
+        -:   41:    
+     5000:   42:    if (success == -1) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   43:        failCount++;
+        -:   44:    }
+        -:   45:    
+        -:   46:    // Taken from Village Card Function
+        -:   47:    
+        -:   48:    //+1 Card
+     5000:   49:    success = drawCard(currentPlayer, &testState);
+call    0 returned 100%
+     5000:   50:    if (success == -1 && testState.deckCount[currentPlayer] > 0) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+branch  2 never executed
+branch  3 never executed
+    #####:   51:        drawCardFailed++;
+    #####:   52:        failCount++;
+        -:   53:    }
+        -:   54:    
+        -:   55:    //+2 Actions
+        -:   56:    // ** Bug #4: Change the +2 actions to +4
+     5000:   57:    testState.numActions = testState.numActions + 4;
+        -:   58:    
+        -:   59:    // Was add right number of actions a success?
+     5000:   60:    if (testState.numActions != state->numActions + 2) {
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+     5000:   61:        numActionsFailed++;
+     5000:   62:        failCount++;
+        -:   63:    }
+        -:   64:    
+        -:   65:    //discard card from hand
+     5000:   66:    success = discardCard(handPos, currentPlayer, &testState, 0);
+call    0 returned 100%
+        -:   67:    
+        -:   68:    // Was discarding a card a success?
+     5000:   69:    if (success) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   70:        discardFailed++;
+    #####:   71:        failCount++;
+        -:   72:    }
+        -:   73:    
+        -:   74:    // Check if Deck Count for testState and state match
+     5000:   75:    int testStateDeckCount = testState.deckCount[currentPlayer];
+     5000:   76:    int stateDeckCount = state->deckCount[currentPlayer];
+        -:   77:    
+     5000:   78:    if (testStateDeckCount != stateDeckCount - 1) {
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+     5000:   79:        deckCountFailed++;
+        -:   80://        failCount++;
+        -:   81://        
+        -:   82://        printf("Test: %d\n", testStateDeckCount);
+        -:   83://        printf("State: %d\n", stateDeckCount);
+        -:   84:    }
+        -:   85:    
+        -:   86:    // Check if Hand Count for testState and state match
+     5000:   87:    int testStateHandCount = testState.handCount[currentPlayer];
+     5000:   88:    int stateHandCount = state->handCount[currentPlayer];
+        -:   89:    
+     5000:   90:    if (testStateHandCount != stateHandCount) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   91:        handCountFailed++;
+    #####:   92:        failCount++;
+        -:   93:    }
+     5000:   94:}
+        -:   95:
+function main called 1 returned 100% blocks executed 96%
+        1:   96:int main() {
+        -:   97:    // Use time as seed for random
+        1:   98:    srand(time(NULL));
+call    0 returned 100%
+call    1 returned 100%
+        -:   99:    
+        -:  100:    int i;
+        -:  101:    int currentPlayer;
+        -:  102:    // Players start with one action card per init function in Dominion.c
+        1:  103:    int numActions = 1;
+        -:  104:    
+        -:  105:    struct gameState state;
+        -:  106:    
+        1:  107:    int iterations = 5000;
+        -:  108:    
+        1:  109:    printf("Testing: villageCard\n\n");
+call    0 returned 100%
+        1:  110:    printf("****** RANDOM TESTS *****\n");
+call    0 returned 100%
+        -:  111:    
+        -:  112:    // Initalize Game
+     5001:  113:    for (i = 0; i < iterations; i++) {
+branch  0 taken 99%
+branch  1 taken 1% (fallthrough)
+        -:  114:        // Clear the game state
+     5000:  115:        memset(&state, 23, sizeof(struct gameState));
+        -:  116:        
+        -:  117:        // Get the player number
+     5000:  118:        currentPlayer = Random() * MAX_PLAYERS;
+call    0 returned 100%
+        -:  119:        
+        -:  120:        // Set the deck count for the player
+     5000:  121:        state.deckCount[currentPlayer] = Random() * MAX_DECK;
+call    0 returned 100%
+        -:  122:        
+        -:  123:        // Set hand count to random number
+     5000:  124:        state.handCount[currentPlayer] = Random() * MAX_HAND;
+call    0 returned 100%
+        -:  125:        
+        -:  126:        // Set the discard count for the player
+     5000:  127:        state.discardCount[currentPlayer] = Random() * MAX_DECK;
+call    0 returned 100%
+        -:  128:        
+        -:  129:        // Set the number of cards current players played
+     5000:  130:        state.playedCardCount = Random() * (MAX_DECK - 1);
+call    0 returned 100%
+        -:  131:        
+        -:  132:        // Set the number of action cards
+     5000:  133:        state.numActions = numActions;
+        -:  134:        
+        -:  135:        // Set the player as current player (whose turn)
+     5000:  136:        state.whoseTurn = currentPlayer;
+        -:  137:        
+        -:  138:        // Run Adventurer Test
+     5000:  139:        randomSmithyCheck(currentPlayer, &state);
+call    0 returned 100%
+        -:  140:    }
+        -:  141:    
+        1:  142:    if (failCount == 0) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:  143:        printf("PROGRAM TEST SUCCESFULLY COMPLETED\n\n");
+call    0 never executed
+        -:  144:    } else {
+        1:  145:        printf("PROGRAM TEST FAILED\n\n");
+call    0 returned 100%
+        1:  146:        printf("NUMBER OF TESTS FAILED: %d\n", failCount);
+call    0 returned 100%
+        1:  147:        printf("NUM ACTIONS TESTS FAILED: %d\n", numActionsFailed);
+call    0 returned 100%
+        1:  148:        printf("DISCARD TESTS FAILED: %d\n", discardFailed);
+call    0 returned 100%
+        1:  149:        printf("DRAW CARD TESTS FAILED: %d\n", drawCardFailed);
+call    0 returned 100%
+        1:  150:        printf("DECK COUNT TESTS FAILED: %d\n", deckCountFailed);
+call    0 returned 100%
+        1:  151:        printf("HAND COUNT TESTS FAILED: %d\n", handCountFailed);
+call    0 returned 100%
+        -:  152:    }
+        -:  153:    
+        1:  154:    return 0;
+        -:  155:}
